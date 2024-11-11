@@ -1,40 +1,34 @@
 import React, { useState } from "react";
 
-function PlantCard({ plant, onUpdatePlant, onDeletePlant }) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [newPrice, setNewPrice] = useState(plant.price);
+function PlantCard({ plant, onClickDelete }) {
+  const [inStock, setInStock] = useState("true");
 
-  function handleToggleStock() {
-    onUpdatePlant({ ...plant, inStock: !plant.inStock });
-  }
+  const handleStockToggle = () => {
+    setInStock((prevInStock) => !prevInStock);
+  };
 
-  function handlePriceUpdate() {
-    onUpdatePlant({ ...plant, price: newPrice });
-    setIsEditing(false);
-  }
-
+  const handleClickDelete = () => {
+    fetch(`http://localhost:6001/plants/${plant.id}`, {
+      method: "DELETE",
+    })
+      .then((r) => r.json())
+      .then(() => onClickDelete(plant.id));
+  };
   return (
-    <li className="card">
+    <li className="card" data-testid="plant-item">
       <img src={plant.image} alt={plant.name} />
       <h4>{plant.name}</h4>
-      <p>Price: ${plant.price}</p>
-      {isEditing ? (
-        <input
-          type="number"
-          value={newPrice}
-          onChange={(e) => setNewPrice(e.target.value)}
-          onBlur={handlePriceUpdate}
-        />
-      ) : (
-        <p>Price: ${plant.price}</p>
-      )}
-      <button onClick={() => setIsEditing(!isEditing)}>
-        {isEditing ? "Save" : "Edit Price"}
+      <p>Price: {plant.price}</p>
+      <button className={inStock ? "primary" : ""} onClick={handleStockToggle}>
+        {inStock ? "In Stock" : "Out of Stock"}
       </button>
-      <button onClick={handleToggleStock}>
-        {plant.inStock ? "In Stock" : "Out of Stock"}
+      <button
+        className="primary"
+        style={{ marginLeft: "40px" }}
+        onClick={handleClickDelete}
+      >
+        Delete Plant
       </button>
-      <button onClick={() => onDeletePlant(plant.id)}>Delete</button>
     </li>
   );
 }

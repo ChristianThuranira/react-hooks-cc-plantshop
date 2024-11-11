@@ -1,47 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import NewPlantForm from "./NewPlantForm";
 import PlantList from "./PlantList";
 import Search from "./Search";
+import { useEffect, useState } from "react";
 
 function PlantPage() {
   const [plants, setPlants] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    // Fetch plants from API or storage
-    fetch("/api/plants") // replace with your API endpoint
+    fetch("http://localhost:6001/plants")
       .then((r) => r.json())
-      .then(setPlants);
+      .then((data) => setPlants(data));
   }, []);
 
-  function handleAddPlant(newPlant) {
-    setPlants([...plants, newPlant]);
-  }
+  const onAddItem = (newItem) => {
+    setPlants([...plants, newItem]);
+  };
 
-  function handleUpdatePlant(updatedPlant) {
-    const updatedPlants = plants.map((plant) =>
-      plant.id === updatedPlant.id ? updatedPlant : plant
-    );
+  const filteredPlants = plants.filter((plant) => {
+    return plant.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  const handleDeletedPlant = (id) => {
+    const updatedPlants = plants.filter((plant) => {
+      return plant.id !== id;
+    });
     setPlants(updatedPlants);
-  }
-
-  function handleDeletePlant(id) {
-    setPlants(plants.filter((plant) => plant.id !== id));
-  }
-
-  const filteredPlants = plants.filter((plant) =>
-    plant.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  };
   return (
     <main>
-      <NewPlantForm onAddPlant={handleAddPlant} />
-      <Search searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-      <PlantList
-        plants={filteredPlants}
-        onUpdatePlant={handleUpdatePlant}
-        onDeletePlant={handleDeletePlant}
-      />
+      <NewPlantForm onAddItem={onAddItem} />
+      <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <PlantList plants={filteredPlants} onClickDelete={handleDeletedPlant}/>
     </main>
   );
 }

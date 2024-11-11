@@ -1,19 +1,38 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 
-function NewPlantForm({ onAddPlant }) {
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
-  const [price, setPrice] = useState("");
+function NewPlantForm({ onAddItem }) {
+  const [formData, setFormData] = useState({
+    name: "",
+    image: "",
+    price: "",
+  });
 
-  function handleSubmit(e) {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const newPlant = { name, image, price, inStock: true };
-    onAddPlant(newPlant);
-    setName("");
-    setImage("");
-    setPrice("");
-  }
-
+    console.log(formData);
+    fetch("http://localhost:6001/plants", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((r) => r.json())
+      .then((newItem) => {
+        onAddItem(newItem);
+        setFormData("");
+      });
+  };
   return (
     <div className="new-plant-form">
       <h2>New Plant</h2>
@@ -22,23 +41,23 @@ function NewPlantForm({ onAddPlant }) {
           type="text"
           name="name"
           placeholder="Plant name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          onChange={handleChange}
         />
         <input
           type="text"
           name="image"
+          value={formData.image}
           placeholder="Image URL"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
+          onChange={handleChange}
         />
         <input
           type="number"
           name="price"
           step="0.01"
+          value={formData.price}
           placeholder="Price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={handleChange}
         />
         <button type="submit">Add Plant</button>
       </form>

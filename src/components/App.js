@@ -5,9 +5,9 @@ import PlantPage from "./PlantPage";
 function App() {
   return (
     <div className="app">
+      <h1>Hello, Plantsy!</h1>
       <Header />
       <PlantPage />
-      
     </div>
   );
 }

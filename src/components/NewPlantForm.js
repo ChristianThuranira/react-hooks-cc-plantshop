@@ -19,7 +19,7 @@ function NewPlantForm({ onAddItem }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    fetch("http://localhost:6001/plants", {
+    fetch("https://react-hooks-cc-plantshop-ogge.onrender.com/plants", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

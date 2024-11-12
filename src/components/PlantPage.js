@@ -9,7 +9,7 @@ function PlantPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:6001/plants")
+    fetch("https://my-json-server.typicode.com/ChristianThuranira/react-hooks-cc-plantshop/plants")
       .then((r) => r.json())
       .then((data) => setPlants(data));
   }, []);

@@ -8,7 +8,7 @@ function PlantCard({ plant, onClickDelete }) {
   };
 
   const handleClickDelete = () => {
-    fetch(`http://localhost:6001/plants/${plant.id}`, {
+    fetch(`https://my-json-server.typicode.com/ChristianThuranira/react-hooks-cc-plantshop/plants/${plant.id}`, {
       method: "DELETE",
     })
       .then((r) => r.json())

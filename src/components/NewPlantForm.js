@@ -19,7 +19,7 @@ function NewPlantForm({ onAddItem }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    fetch("http://localhost:6001/plants", {
+    fetch("https://my-json-server.typicode.com/ChristianThuranira/react-hooks-cc-plantshop/plants", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

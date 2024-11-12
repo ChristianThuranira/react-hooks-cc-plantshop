@@ -13,7 +13,10 @@
   "scripts": {
     "start": "react-scripts start",
     "server": "json-server --watch db.json -p 6001",
-    "test": "jest --bail"
+    "test": "jest --bail",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages  -d  build",
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
